@@ -8,7 +8,7 @@ function make_move() {
    var my_y = get_my_y();
   
    // we found an item! take it!
-   if (board[my_x][my_y] > 0) {
+   if (board[my_x][my_y] > 0 && required_type(board[my_x][my_y])) {
        return TAKE;
    }
 
@@ -42,7 +42,7 @@ function get_nearest() {
 	var	mn = 9007199254747992;
 	for(r = 0;r<board.length;r++) {
 		for(c = 0;c<board[r].length;c++) {
-			if(has_item(board[r][c])) {
+			if(has_item(board[r][c]) && required_type(board[r][c])) {
 				var diff = Math.abs(my_x-r)+Math.abs(my_y-c);
 				if(diff<mn) {
 					mn = diff;
@@ -53,4 +53,12 @@ function get_nearest() {
 	}
 
 	return res;
+}
+
+function required_type(t) {
+
+	 var half = get_total_item_count(t)/2.0;
+	 var my_count = get_my_item_count(t);
+	 var opp_count = get_my_item_count(t);
+	 return my_count<=half && opp_count<=half;
 }
