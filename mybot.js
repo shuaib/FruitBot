@@ -3,18 +3,54 @@ function new_game() {
 
 function make_move() {
    var board = get_board();
-
+   
+   var my_x = get_my_x();
+   var my_y = get_my_y();
+  
    // we found an item! take it!
-   if (board[get_my_x()][get_my_y()] > 0) {
+   if (board[my_x][my_y] > 0) {
        return TAKE;
    }
 
+   /*
    var rand = Math.random() * 4;
 
    if (rand < 1) return NORTH;
    if (rand < 2) return SOUTH;
    if (rand < 3) return EAST;
    if (rand < 4) return WEST;
+   */
+
+   var next = get_nearest();
+   if(next[0]>my_x) return EAST;
+   if(next[0]<my_x) return WEST;
+   if(next[1]<my_y) return NORTH;
+   if(next[1]>my_y) return SOUTH;
 
    return PASS;
+}
+
+function get_nearest() {
+
+	var board = get_board();
+
+	var my_x = get_my_x();
+	var my_y = get_my_y();
+
+	var res = [my_x, my_y];
+
+	var	mn = 9007199254747992;
+	for(r = 0;r<board.length;r++) {
+		for(c = 0;c<board[r].length;c++) {
+			if(has_item(board[r][c])) {
+				var diff = Math.abs(my_x-r)+Math.abs(my_y-c);
+				if(diff<mn) {
+					mn = diff;
+					var res = [r, c];
+				}
+			}
+		}
+	}
+
+	return res;
 }
