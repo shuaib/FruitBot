@@ -42,13 +42,50 @@ function make_move() {
    if (rand < 4) return WEST;
    */
 
-   var next = get_nearest_required();
+   var next = get_nearest_average_required();
    if(next[0]>my_x) return EAST;
    if(next[0]<my_x) return WEST;
    if(next[1]<my_y) return NORTH;
    if(next[1]>my_y) return SOUTH;
    
    return PASS;
+}
+
+function get_nearest_average_required() {
+
+    var board = get_board();
+    var x = get_my_x();
+    var y = get_my_y();
+    var currents = new Array();
+
+    for(r=0;r<board.length;r++) {
+        for(c=0;c<board[r].length;c++){
+            if(board[r][c]==current){
+                currents.push([r,c]);
+            }
+
+        }
+    }
+    var avg_x=0;
+    var avg_y=0;
+    for(i=0;i<currents.length;i++){
+        avg_x += currents[i][0];
+        avg_y += currents[i][1];
+    }
+    avg_x /= currents.length;
+    avg_y /= currents.length;
+    var	mn = 9007199254747992;
+    var res = [x, y];
+    for(i=0;i<currents.length;i++) {
+        var diff = (Math.abs(currents[i][0]-avg_x)+Math.abs(currents[i][1]-avg_y))*(currents.length-1);
+        diff += Math.abs(currents[i][0]-x)+Math.abs(currents[i][1]-y);
+        if(diff<mn) {
+            mn = diff;
+            var res = [currents[i][0], currents[i][1]];
+        }
+    }
+    return res;
+
 }
 
 function get_nearest_required() {
