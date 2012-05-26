@@ -28,7 +28,7 @@ function make_move() {
    var t = board[my_x][my_y];
    if (t > 0) {
     
-       if(required_type(t)) {
+       if(t==current) {
             return TAKE;
        }
    }
